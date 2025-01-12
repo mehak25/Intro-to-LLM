@@ -1,0 +1,50 @@
+**Instructions for downloading data from Twitter/X and Facebook:**
+
+To download tweets from Twitter/X for language modeling research, you can use Twitter/X's API (Application Programming Interface). Here are the general steps you need to follow:
+
+**Create a Twitter/X Developer Account:**
+
+- Go to the Twitter/X Developer website and sign in with your Twitter/X account.
+- Create a developer account and create a new app. This will provide you with API keys and access tokens.
+
+**Set Up Your Twitter/X App:**
+
+- Once your app is created, navigate to the "Keys and Tokens" tab to get your API key, API secret key, Access token, and Access token secret.
+
+**Install Tweepy (Python Library for Twitter/X API):**
+
+- You can use the Tweepy library in Python to interact with the Twitter/X API. Install it using:
+
+**Use Tweepy to Download Tweets:**
+
+- Use the following code snippet as a starting point. Replace the placeholders with your actual API keys and tokens.
+- Below is an example search for tweets containing the specified keyword ('language modeling') and saves them to a JSON file.
+
+**Adhere to Twitter/X API Rate Limits:**
+
+- Be mindful of Twitter/X's API rate limits. Make sure your application does not exceed these limits to avoid temporary suspensions.
+
+**Preprocess and Clean Data:**
+
+- Depending on your research goals, you might need to preprocess and clean the downloaded tweets before using them for language modeling.
+
+To download status updates from Facebook for language modeling research. Here are the general steps you need to follow:
+
+**Create a Facebook App and Obtain Access Token:**
+
+- Go to the [Facebook Developer Portal](https://developers.facebook.com/) and create a new app.
+- Once created, obtain an access token with the necessary permissions. For reading posts, you usually need the user_posts permission for personal profiles or read_insights for pages.
+
+**Use Graph API to Fetch Posts:**
+
+- Construct API requests to fetch posts from profiles or pages. The endpoint for fetching posts typically looks like:
+- <https://graph.facebook.com/{user-id> or page-id}/posts
+- Replace {user-id or page-id} with the ID of the profile or page you want to fetch posts from.
+
+**Handling Data:**
+
+- The response will be in JSON format. Extract and store the data as needed for your research.
+
+**Compliance and Ethical Considerations:**
+
+- Ensure you comply with Facebook's Platform Policies and any legal or ethical guidelines regarding data usage and privacy.
