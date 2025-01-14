@@ -23,6 +23,7 @@ from simpletransformers.classification import ClassificationModel, Classificatio
 import numpy as np
 import logging
 import pandas as pd
+from sklearn.manifold import TSNE
 
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
@@ -59,38 +60,41 @@ model = ClassificationModel(
     args=model_args,
     use_cuda=False
     )
-
-# Define function to extract embeddings from layer 23
-def get_layer_embeddings(model, texts, layer_num=23):
-    tokenizer = model.tokenizer
-    device = model.device  # Get the device model is currently on
-
-	c_emb=[]
-    for text in texts:
-        
-        
-        inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
-        inputs = inputs.to(device)  # Move inputs to the same device as the model
-           
-        outputs = model.model(**inputs, output_hidden_states=True)
-           
-        layer_embeddings = outputs.hidden_states[layer_num]
-        last_embeddings = layer_embeddings[:,0,:].detach().cpu().numpy()   
-        c_emb.append(last_embeddings.squeeze())
-            
-    return c_emb
     
 
 # Assuming 'text' is the column with text data
 all_texts = train_data_df['text'].tolist()
-     
-#Extract embeddings from pre-trined model     
-c_embeddings = get_layer_embeddings(model, all_texts)
 
 
-#Save embeddings on local machine
-with open('.', "wb") as f:
-     pickle.dump(c_embeddings, f)
+tokenizer = model.tokenizer
+device = model.device  # Get the device model is currently on
+
+#only visualizing attention for first text input
+inputs = tokenizer(all_texts[0], return_tensors="pt", padding=True, truncation=True, max_length=512)
+inputs = inputs.to(device)  # Move inputs to the same device as the model
+           
+outputs = model.model(**inputs, output_hidden_states=True)
+attentions = outputs.attentions  # List of attention matrices per layer
+attention_matrix = attentions[0][0, 0].detach().numpy()  # Layer 0, Head 0
+
+# Tokenize input for interpretation
+tokens = tokenizer.convert_ids_to_tokens(inputs.input_ids[0])
+
+# Visualize using heatmap
+plt.figure(figsize=(8, 6))
+sns.heatmap(
+    attention_matrix,
+    xticklabels=tokens,
+    yticklabels=tokens,
+    cmap="viridis",
+    annot=False,
+)
+plt.title("Attention Heatmap: Layer 0, Head 0")
+plt.xlabel("Keys")
+plt.ylabel("Queries")
+plt.show()
+
+
      
 
 

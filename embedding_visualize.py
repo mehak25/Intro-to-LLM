@@ -23,6 +23,7 @@ from simpletransformers.classification import ClassificationModel, Classificatio
 import numpy as np
 import logging
 import pandas as pd
+from sklearn.manifold import TSNE
 
 import torch
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
@@ -87,6 +88,11 @@ all_texts = train_data_df['text'].tolist()
 #Extract embeddings from pre-trined model     
 c_embeddings = get_layer_embeddings(model, all_texts)
 
+tsne = TSNE(2, verbose=1)
+tsne_proj = tsne.fit_transform(c_embeddings)
+
+plt.scatter(tsne_proj[:,0],tsne_proj[:,1])
+plt.show()
 
 #Save embeddings on local machine
 with open('.', "wb") as f:
